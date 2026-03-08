@@ -28,15 +28,10 @@ class ProposalDataTable extends DataTable
                 return number_format($proposal->total, 2) . ' ' . $proposal->currency;
             })
             ->addColumn('status_display', function($proposal) {
-                $statusClass = [
-                    'draft' => 'bg-secondary',
-                    'pending' => 'bg-warning text-dark',
-                    'sent' => 'bg-info',
-                    'accepted' => 'bg-success',
-                    'declined' => 'bg-danger',
-                    'cancelled' => 'bg-dark',
-                ][$proposal->status] ?? 'bg-primary';
-                return '<span class="badge '.$statusClass.' text-capitalize">'.$proposal->status.'</span>';
+                return view('proposals.partials.status', [
+                    'status' => $proposal->status,
+                    'id'     => $proposal->id,
+                ])->render();
             })
             ->addColumn('action', function($proposal) {
                 return view('proposals.partials.action', ['id' => $proposal->id]);

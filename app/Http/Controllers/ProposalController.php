@@ -136,4 +136,32 @@ class ProposalController extends Controller
         $proposal->delete();
         return redirect()->route('proposals.index')->with('success', 'Proposal deleted successfully.');
     }
+
+    public function updateStatus(Request $request, Proposal $proposal)
+    {
+        $request->validate([
+            'status' => 'required|in:draft,pending,sent,accepted,declined,cancelled',
+        ]);
+
+        $proposal->update(['status' => $request->status]);
+
+        if ($request->ajax()) {
+            $colors = [
+                'draft' => '#6c757d',
+                'pending' => '#ffc107',
+                'sent' => '#0dcaf0',
+                'accepted' => '#198754',
+                'declined' => '#dc3545',
+                'cancelled' => '#212529',
+            ];
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Status updated successfully.',
+                'color' => $colors[$request->status] ?? '#0d6efd'
+            ]);
+        }
+
+        return back()->with('success', 'Status updated.');
+    }
 }

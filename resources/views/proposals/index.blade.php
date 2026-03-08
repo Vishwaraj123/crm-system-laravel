@@ -31,5 +31,31 @@
 
     @push('scripts')
         {{ $dataTable->scripts() }}
+        <script>
+            $(document).on('change', '.proposal-status-selector', function() {
+                let id = $(this).data('id');
+                let status = $(this).val();
+                let selector = $(this);
+                
+                $.ajax({
+                    url: "/proposals/" + id + "/status",
+                    type: "PATCH",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        status: status
+                    },
+                    success: function(response) {
+                        if(response.success) {
+                            selector.css("border-bottom-color", response.color);
+                            selector.css("color", response.color);
+                            toastr.success(response.message);
+                        }
+                    },
+                    error: function() {
+                        toastr.error("Something went wrong!");
+                    }
+                });
+            });
+        </script>
     @endpush
 </x-app-layout>

@@ -23,6 +23,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('clients', ClientController::class);
     Route::resource('proposals', \App\Http\Controllers\ProposalController::class);
+    Route::patch('proposals/{proposal}/status', [\App\Http\Controllers\ProposalController::class, 'updateStatus'])->name('proposals.updateStatus');
     Route::resource('invoices', \App\Http\Controllers\InvoiceController::class);
     Route::get('invoices/{invoice}/print', [\App\Http\Controllers\InvoiceController::class, 'print'])->name('invoices.print');
     Route::patch('invoices/{invoice}/status', [\App\Http\Controllers\InvoiceController::class, 'updateStatus'])->name('invoices.updateStatus');
