@@ -58,19 +58,19 @@
                     </a>
                 </li>
 
-                <li class="mb-2">
+                {{-- <li class="mb-2">
                     <a href="#" class="d-flex align-items-center p-2 rounded text-muted text-decoration-none">
                         <i class="las la-percent fs-4 me-3"></i>
                         <span>{{ __('Taxes') }}</span>
                     </a>
-                </li>
+                </li> --}}
 
-                <li class="mt-4 mb-2">
+                {{-- <li class="mb-2">
                     <a href="#" class="d-flex align-items-center p-2 rounded text-muted text-decoration-none">
                         <i class="las la-cog fs-4 me-3"></i>
                         <span>{{ __('Settings') }}</span>
                     </a>
-                </li>
+                </li> --}}
 
                 <li class="mb-2">
                     <a href="#" class="d-flex align-items-center p-2 rounded text-muted text-decoration-none">
