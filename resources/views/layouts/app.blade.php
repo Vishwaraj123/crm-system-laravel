@@ -19,6 +19,9 @@
     <link rel="stylesheet" href="{{ asset('admin/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/css/responsive.min.css') }}">
     
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="{{ asset('admin/css/toastr.min.css') }}">
+    
     @stack('css')
     
     <style>
@@ -42,6 +45,60 @@
             .main-wrapper { padding-left: 0; }
             .header-position { left: -250px; }
             .header-position.active { left: 0; }
+        }
+        
+        /* Global Square Theme */
+        :root {
+            --bs-border-radius: 0 !important;
+            --bs-border-radius-sm: 0 !important;
+            --bs-border-radius-lg: 0 !important;
+            --bs-border-radius-xl: 0 !important;
+            --bs-border-radius-2xl: 0 !important;
+            --bs-border-radius-pill: 0 !important;
+        }
+        
+        *, *::before, *::after {
+            border-radius: 0 !important;
+        }
+
+        /* Fix duplicate toastr icons and giant 'V' glitch */
+        .toast-success {
+            background-image: none !important;
+            padding-left: 50px !important;
+        }
+        .toast-success:before {
+            content: "\f00c" !important; /* LineAwesome check icon */
+            font-family: 'Line Awesome Free' !important;
+            font-weight: 900 !important;
+            position: absolute !important;
+            left: 15px !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            font-size: 20px !important;
+            color: white !important;
+            display: block !important;
+        }
+        .toast-success:after {
+            display: none !important;
+        }
+        /* Ensure close button doesn't inherit LineAwesome and isn't glitched */
+        button.toast-close-button {
+            font-family: Arial, sans-serif !important;
+            opacity: 0.8 !important;
+            text-shadow: none !important;
+            background: none !important;
+            border: none !important;
+            font-size: 20px !important;
+            line-height: 1 !important;
+        }
+
+        /* Fix dropdown item hover text disappearance */
+        .dropdown-item:hover, .dropdown-item:focus {
+            color: #ffffff !important;
+            background-color: #3f52e3 !important; /* Force a dark background */
+        }
+        .dropdown-item:hover i, .dropdown-item:focus i {
+            color: #ffffff !important;
         }
     </style>
 </head>
@@ -75,6 +132,9 @@
     
     <!-- App JS (WAM Style) -->
     <script src="{{ asset('admin/js/app.js') }}"></script>
+
+    <!-- Toastr JS -->
+    <script src="{{ asset('admin/js/toastr.min.js') }}"></script>
 
     @stack('scripts')
     

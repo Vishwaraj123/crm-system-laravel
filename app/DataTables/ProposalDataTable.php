@@ -2,26 +2,32 @@
 
 namespace App\DataTables;
 
-use App\Models\Offer;
+use App\Models\Proposal;
+use App\Models\Setting;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class QuoteDataTable extends DataTable
+class ProposalDataTable extends DataTable
 {
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->addColumn('client_name', function($offer) {
-                return $offer->client->name;
+            ->addColumn('client_name', function($proposal) {
+                return $proposal->client->name;
             })
-            ->addColumn('total_display', function($offer) {
-                return number_format($offer->total, 2) . ' ' . $offer->currency;
+            ->addColumn('date_display', function($proposal) {
+                $fmt = Setting::get('date_format', 'd/m/Y');
+                return Carbon::parse($proposal->date)->format($fmt);
             })
-            ->addColumn('status_display', function($offer) {
+            ->addColumn('total_display', function($proposal) {
+                return number_format($proposal->total, 2) . ' ' . $proposal->currency;
+            })
+            ->addColumn('status_display', function($proposal) {
                 $statusClass = [
                     'draft' => 'bg-secondary',
                     'pending' => 'bg-warning text-dark',
@@ -29,17 +35,17 @@ class QuoteDataTable extends DataTable
                     'accepted' => 'bg-success',
                     'declined' => 'bg-danger',
                     'cancelled' => 'bg-dark',
-                ][$offer->status] ?? 'bg-primary';
-                return '<span class="badge '.$statusClass.' text-capitalize">'.$offer->status.'</span>';
+                ][$proposal->status] ?? 'bg-primary';
+                return '<span class="badge '.$statusClass.' text-capitalize">'.$proposal->status.'</span>';
             })
-            ->addColumn('action', function($offer) {
-                return view('offers.partials.action', ['id' => $offer->id]);
+            ->addColumn('action', function($proposal) {
+                return view('proposals.partials.action', ['id' => $proposal->id]);
             })
             ->rawColumns(['status_display', 'action'])
             ->setRowId('id');
     }
 
-    public function query(Offer $model): QueryBuilder
+    public function query(Proposal $model): QueryBuilder
     {
         return $model->with('client')->newQuery();
     }
@@ -47,7 +53,7 @@ class QuoteDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('quote-table')
+                    ->setTableId('proposal-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->orderBy(1)
@@ -65,7 +71,7 @@ class QuoteDataTable extends DataTable
             Column::computed('DT_RowIndex')->title('#')->width(30)->addClass('text-center'),
             Column::make('number')->title(__('Number')),
             Column::make('client_name')->title(__('Client')),
-            Column::make('date')->title(__('Date')),
+            Column::make('date_display')->title(__('Date')),
             Column::make('total_display')->title(__('Total')),
             Column::make('status_display')->title(__('Status')),
             Column::computed('action')
@@ -78,6 +84,6 @@ class QuoteDataTable extends DataTable
 
     protected function filename(): string
     {
-        return 'Quote_' . date('YmdHis');
+        return 'Proposal_' . date('YmdHis');
     }
 }

@@ -3,6 +3,8 @@
 namespace App\DataTables;
 
 use App\Models\Payment;
+use App\Models\Setting;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -20,6 +22,10 @@ class PaymentDataTable extends DataTable
             })
             ->addColumn('invoice_number', function($payment) {
                 return $payment->invoice->number;
+            })
+            ->addColumn('date_display', function($payment) {
+                $fmt = Setting::get('date_format', 'd/m/Y');
+                return Carbon::parse($payment->date)->format($fmt);
             })
             ->addColumn('amount_display', function($payment) {
                 return number_format($payment->amount, 2);
@@ -58,7 +64,7 @@ class PaymentDataTable extends DataTable
             Column::make('number')->title(__('Number')),
             Column::make('invoice_number')->title(__('Invoice')),
             Column::make('client_name')->title(__('Client')),
-            Column::make('date')->title(__('Date')),
+            Column::make('date_display')->title(__('Date')),
             Column::make('amount_display')->title(__('Amount')),
             Column::make('payment_mode')->title(__('Mode')),
             Column::computed('action')

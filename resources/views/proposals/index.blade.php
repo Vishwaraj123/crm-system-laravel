@@ -2,10 +2,10 @@
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
             <h2 class="h4 font-weight-bold text-dark mb-0">
-                {{ __('Quote List') }}
+                {{ __('Proposal List') }}
             </h2>
-            <a href="{{ route('offers.create') }}" class="btn btn-primary">
-                {{ __('Add New Quote') }}
+            <a href="{{ route('proposals.create') }}" class="btn btn-primary">
+                {{ __('Add New Proposal') }}
             </a>
         </div>
     </x-slot>

@@ -35,7 +35,7 @@
                                 </div>
                                 <div class="col-6 text-end">
                                     <h6 class="text-muted text-uppercase x-small fw-bold mb-2">{{ __('Payment Date') }}</h6>
-                                    <p class="fw-bold mb-0">{{ $payment->date->format('d M, Y') }}</p>
+                                    <p class="fw-bold mb-0">{{ $payment->date->format($appSettings['date_format'] ?? 'd/m/Y') }}</p>
                                     <h6 class="text-muted text-uppercase x-small fw-bold mt-3 mb-2">{{ __('Payment Mode') }}</h6>
                                     <p class="fw-bold mb-0">{{ $payment->payment_mode ?? __('N/A') }}</p>
                                 </div>
@@ -53,7 +53,7 @@
                                         <tr>
                                             <td class="py-3 px-4">
                                                 <div class="fw-bold">{{ $payment->invoice->number }}</div>
-                                                <div class="text-muted x-small">{{ __('Date') }}: {{ $payment->invoice->date->format('d/m/Y') }}</div>
+                                                <div class="text-muted x-small">{{ __('Date') }}: {{ $payment->invoice->date->format($appSettings['date_format'] ?? 'd/m/Y') }}</div>
                                             </td>
                                             <td class="py-3 text-end px-4 fw-bold text-primary fs-5">
                                                 {{ number_format($payment->amount, 2) }}

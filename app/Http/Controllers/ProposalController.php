@@ -2,24 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Offer;
-use App\Http\Requests\StoreOfferRequest;
-use App\Http\Requests\UpdateOfferRequest;
+use App\Models\Proposal;
+use App\Http\Requests\StoreProposalRequest;
+use App\Http\Requests\UpdateProposalRequest;
+use Illuminate\Http\Request;
 
-class OfferController extends Controller
+class ProposalController extends Controller
 {
-    public function index(\App\DataTables\QuoteDataTable $dataTable)
+    public function index(\App\DataTables\ProposalDataTable $dataTable)
     {
-        return $dataTable->render('offers.index');
+        return $dataTable->render('proposals.index');
     }
 
     public function create()
     {
         $clients = \App\Models\Client::all();
-        return view('offers.create', compact('clients'));
+        return view('proposals.create', compact('clients'));
     }
 
-    public function store(\Illuminate\Http\Request $request)
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'client_id' => 'required|exists:clients,id',
@@ -42,7 +43,7 @@ class OfferController extends Controller
         $taxTotal = $subTotal * ($validated['tax_rate'] / 100);
         $total = $subTotal + $taxTotal;
 
-        $offer = Offer::create([
+        $proposal = Proposal::create([
             'client_id' => $validated['client_id'],
             'number' => $validated['number'],
             'year' => date('Y', strtotime($validated['date'])),
@@ -57,7 +58,7 @@ class OfferController extends Controller
         ]);
 
         foreach ($validated['items'] as $item) {
-            $offer->items()->create([
+            $proposal->items()->create([
                 'itemName' => $item['itemName'],
                 'quantity' => $item['quantity'],
                 'price' => $item['price'],
@@ -65,26 +66,24 @@ class OfferController extends Controller
             ]);
         }
 
-        return redirect()->route('offers.index')->with('success', 'Offer created successfully.');
+        return redirect()->route('proposals.index')->with('success', 'Proposal created successfully.');
     }
 
-    public function show(Offer $offer)
+    public function show(Proposal $proposal)
     {
-        $offer->load('client', 'items');
-        return view('offers.show', compact('offer'));
+        $proposal->load('client', 'items');
+        return view('proposals.show', compact('proposal'));
     }
 
-    public function edit(Offer $offer)
+    public function edit(Proposal $proposal)
     {
         $clients = \App\Models\Client::all();
-        $offer->load('items');
-        return view('offers.edit', compact('offer', 'clients'));
+        $proposal->load('items');
+        return view('proposals.edit', compact('proposal', 'clients'));
     }
 
-    public function update(\Illuminate\Http\Request $request, Offer $offer)
+    public function update(Request $request, Proposal $proposal)
     {
-        // Update logic similar to store but with item sync/replacement
-        // For brevity and focus on replication, I'll implement a full replacement of items on update
         $validated = $request->validate([
             'client_id' => 'required|exists:clients,id',
             'number' => 'required|string',
@@ -106,7 +105,7 @@ class OfferController extends Controller
         $taxTotal = $subTotal * ($validated['tax_rate'] / 100);
         $total = $subTotal + $taxTotal;
 
-        $offer->update([
+        $proposal->update([
             'client_id' => $validated['client_id'],
             'number' => $validated['number'],
             'year' => date('Y', strtotime($validated['date'])),
@@ -119,9 +118,9 @@ class OfferController extends Controller
             'notes' => $validated['notes'],
         ]);
 
-        $offer->items()->delete();
+        $proposal->items()->delete();
         foreach ($validated['items'] as $item) {
-            $offer->items()->create([
+            $proposal->items()->create([
                 'itemName' => $item['itemName'],
                 'quantity' => $item['quantity'],
                 'price' => $item['price'],
@@ -129,12 +128,12 @@ class OfferController extends Controller
             ]);
         }
 
-        return redirect()->route('offers.index')->with('success', 'Offer updated successfully.');
+        return redirect()->route('proposals.index')->with('success', 'Proposal updated successfully.');
     }
 
-    public function destroy(Offer $offer)
+    public function destroy(Proposal $proposal)
     {
-        $offer->delete();
-        return redirect()->route('offers.index')->with('success', 'Offer deleted successfully.');
+        $proposal->delete();
+        return redirect()->route('proposals.index')->with('success', 'Proposal deleted successfully.');
     }
 }

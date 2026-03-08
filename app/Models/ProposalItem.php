@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class OfferItem extends Model
+class ProposalItem extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'offer_id',
+        'proposal_id',
         'itemName',
         'description',
         'quantity',
@@ -19,8 +19,8 @@ class OfferItem extends Model
         'total',
     ];
 
-    public function offer(): BelongsTo
+    public function proposal(): BelongsTo
     {
-        return $this->belongsTo(Offer::class);
+        return $this->belongsTo(Proposal::class);
     }
 }

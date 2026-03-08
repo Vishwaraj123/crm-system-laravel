@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="h4 font-weight-bold text-dark mb-0">
-            {{ __('Create New Quote') }}
+            {{ __('Create New Proposal') }}
         </h2>
     </x-slot>
 
     <div class="py-4">
         <div class="container-fluid">
-            <form method="POST" action="{{ route('offers.store') }}" id="offer-form">
+            <form method="POST" action="{{ route('proposals.store') }}" id="proposal-form">
                 @csrf
                 <div class="row">
                     <div class="col-md-4">
@@ -29,8 +29,8 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="number" class="form-label">{{ __('Quote Number') }} <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('number') is-invalid @enderror" id="number" name="number" value="{{ old('number', 'QT-' . date('YmdHis')) }}" required>
+                                    <label for="number" class="form-label">{{ __('Proposal Number') }} <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('number') is-invalid @enderror" id="number" name="number" value="{{ old('number', 'PR-' . date('YmdHis')) }}" required>
                                     @error('number')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -116,8 +116,8 @@
                                 </div>
 
                                 <div class="d-flex justify-content-end gap-2 mt-4">
-                                    <a href="{{ route('offers.index') }}" class="btn btn-secondary">{{ __('Cancel') }}</a>
-                                    <button type="submit" class="btn btn-primary">{{ __('Save Quote') }}</button>
+                                    <a href="{{ route('proposals.index') }}" class="btn btn-secondary">{{ __('Cancel') }}</a>
+                                    <button type="submit" class="btn btn-primary">{{ __('Save Proposal') }}</button>
                                 </div>
                             </div>
                         </div>

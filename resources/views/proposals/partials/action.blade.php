@@ -3,11 +3,11 @@
         <i class="las la-ellipsis-v"></i>
     </button>
     <ul class="dropdown-menu dropdown-menu-end shadow border-0">
-        <li><a class="dropdown-item px-3" href="{{ route('offers.show', $id) }}"><i class="las la-eye me-2 text-info"></i> {{ __('View') }}</a></li>
-        <li><a class="dropdown-item px-3" href="{{ route('offers.edit', $id) }}"><i class="las la-pencil-alt me-2 text-secondary"></i> {{ __('Edit') }}</a></li>
+        <li><a class="dropdown-item px-3" href="{{ route('proposals.show', $id) }}"><i class="las la-eye me-2 text-info"></i> {{ __('View') }}</a></li>
+        <li><a class="dropdown-item px-3" href="{{ route('proposals.edit', $id) }}"><i class="las la-pencil-alt me-2 text-secondary"></i> {{ __('Edit') }}</a></li>
         <li><hr class="dropdown-divider"></li>
         <li>
-            <form action="{{ route('offers.destroy', $id) }}" method="POST" onsubmit="return confirm('{{ __('Are you sure?') }}')">
+            <form action="{{ route('proposals.destroy', $id) }}" method="POST" onsubmit="return confirm('{{ __('Are you sure?') }}')">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="dropdown-item px-3 text-danger"><i class="las la-trash me-2"></i> {{ __('Delete') }}</button>

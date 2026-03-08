@@ -16,6 +16,11 @@ class Invoice extends Model
         'notes', 'created_by'
     ];
 
+    protected $casts = [
+        'date' => 'date',
+        'expired_date' => 'date',
+    ];
+
     public function client()
     {
         return $this->belongsTo(Client::class);

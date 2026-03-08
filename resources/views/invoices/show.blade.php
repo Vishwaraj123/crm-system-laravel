@@ -4,13 +4,13 @@
             <h2 class="h4 font-weight-bold text-dark mb-0">
                 {{ __('Invoice') }}: {{ $invoice->number }}
             </h2>
-            <div class="btn-group shadow-sm rounded-pill overflow-hidden">
-                <a href="{{ route('invoices.edit', $invoice) }}" class="btn btn-outline-primary btn-sm px-3">
+            <div class="btn-group shadow-sm overflow-hidden rounded-0">
+                <a href="{{ route('invoices.edit', $invoice) }}" class="btn btn-outline-primary btn-sm px-3 rounded-0">
                     <i class="las la-edit"></i> {{ __('Edit') }}
                 </a>
-                <button class="btn btn-primary btn-sm px-3">
+                <a href="{{ route('invoices.print', $invoice) }}" target="_blank" class="btn btn-primary btn-sm px-3 rounded-0">
                     <i class="las la-download"></i> {{ __('Download PDF') }}
-                </button>
+                </a>
             </div>
         </div>
     </x-slot>
@@ -27,9 +27,9 @@
                                     <p class="text-muted">{{ $invoice->number }}</p>
                                 </div>
                                 <div class="text-end">
-                                    <h5 class="fw-bold">{{ config('app.name') }}</h5>
-                                    <p class="text-muted small mb-0">{{ __('Date') }}: {{ $invoice->date->format('d/m/Y') }}</p>
-                                    <p class="text-muted small">{{ __('Due Date') }}: {{ $invoice->expired_date->format('d/m/Y') }}</p>
+                                    <h5 class="fw-bold">{{ $appSettings['company_name'] ?? '' }}</h5>
+                                    <p class="text-muted small mb-0">{{ __('Date') }}: {{ $invoice->date->format($appSettings['date_format'] ?? 'd/m/Y') }}</p>
+                                    <p class="text-muted small">{{ __('Due Date') }}: {{ $invoice->expired_date->format($appSettings['date_format'] ?? 'd/m/Y') }}</p>
                                 </div>
                             </div>
 
@@ -121,7 +121,7 @@
                                 </div>
                                 <div>
                                     <div class="fw-bold small">{{ number_format($payment->amount, 2) }}</div>
-                                    <div class="text-muted x-small">{{ $payment->date->format('d M, Y') }}</div>
+                                    <div class="text-muted x-small">{{ $payment->date->format($appSettings['date_format'] ?? 'd/m/Y') }}</div>
                                 </div>
                             </div>
                             @empty

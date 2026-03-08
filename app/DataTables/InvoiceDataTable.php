@@ -3,6 +3,8 @@
 namespace App\DataTables;
 
 use App\Models\Invoice;
+use App\Models\Setting;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -19,16 +21,14 @@ class InvoiceDataTable extends DataTable
                 return $invoice->client->name;
             })
             ->addColumn('status_display', function($invoice) {
-                $statusClass = [
-                    'draft' => 'bg-secondary',
-                    'pending' => 'bg-warning text-dark',
-                    'sent' => 'bg-info',
-                    'paid' => 'bg-success',
-                    'unpaid' => 'bg-danger',
-                    'partially' => 'bg-primary',
-                    'overdue' => 'bg-dark',
-                ][$invoice->status] ?? 'bg-primary';
-                return '<span class="badge '.$statusClass.' text-capitalize">'.$invoice->status.'</span>';
+                return view('invoices.partials.status', [
+                    'status' => $invoice->status,
+                    'id' => $invoice->id
+                ])->render();
+            })
+            ->addColumn('date_display', function($invoice) {
+                $fmt = Setting::get('date_format', 'd/m/Y');
+                return Carbon::parse($invoice->date)->format($fmt);
             })
             ->addColumn('total_display', function($invoice) {
                 return number_format($invoice->total, 2) . ' ' . $invoice->currency;
@@ -66,7 +66,7 @@ class InvoiceDataTable extends DataTable
             Column::computed('DT_RowIndex')->title('#')->width(30)->addClass('text-center'),
             Column::make('number')->title(__('Number')),
             Column::make('client_name')->title(__('Client')),
-            Column::make('date')->title(__('Date')),
+            Column::make('date_display')->title(__('Date')),
             Column::make('total_display')->title(__('Total')),
             Column::make('status_display')->title(__('Status')),
             Column::computed('action')

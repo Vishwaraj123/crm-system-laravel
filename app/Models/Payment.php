@@ -15,6 +15,10 @@ class Payment extends Model
         'payment_mode', 'notes', 'created_by'
     ];
 
+    protected $casts = [
+        'date' => 'date',
+    ];
+
     public function invoice()
     {
         return $this->belongsTo(Invoice::class);

@@ -41,8 +41,8 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h6 class="card-subtitle mb-1 opacity-75">{{ __('Total Quotes') }}</h6>
-                                    <h3 class="card-title mb-0">{{ $stats['offers'] }}</h3>
+                                    <h6 class="card-subtitle mb-1 opacity-75">{{ __('Total Proposals') }}</h6>
+                                    <h3 class="card-title mb-0">{{ $stats['proposals'] }}</h3>
                                 </div>
                                 <i class="las la-file-alt fs-1 opacity-50"></i>
                             </div>
@@ -119,7 +119,7 @@
                 <div class="col-md-6">
                     <div class="card border-0 shadow-sm h-100">
                         <div class="card-header bg-white py-3">
-                            <h5 class="card-title mb-0">{{ __('Recent Quotes') }}</h5>
+                            <h5 class="card-title mb-0">{{ __('Recent Proposals') }}</h5>
                         </div>
                         <div class="card-body p-0">
                             <div class="table-responsive">
@@ -132,11 +132,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($stats['recent_offers'] as $offer)
+                                        @foreach($stats['recent_proposals'] as $proposal)
                                             <tr>
-                                                <td class="fw-bold">{{ $offer->number }}</td>
-                                                <td>{{ $offer->client->name }}</td>
-                                                <td>{{ number_format($offer->total, 2) }}</td>
+                                                <td class="fw-bold">{{ $proposal->number }}</td>
+                                                <td>{{ $proposal->client->name }}</td>
+                                                <td>{{ number_format($proposal->total, 2) }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -144,7 +144,7 @@
                             </div>
                         </div>
                         <div class="card-footer bg-white border-top text-center">
-                            <a href="{{ route('offers.index') }}" class="btn btn-sm btn-link text-decoration-none">{{ __('View All Quotes') }}</a>
+                            <a href="{{ route('proposals.index') }}" class="btn btn-sm btn-link text-decoration-none">{{ __('View All Proposals') }}</a>
                         </div>
                     </div>
                 </div>

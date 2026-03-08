@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\Client;
+use App\Models\Setting;
 use App\DataTables\InvoiceDataTable;
 use Illuminate\Http\Request;
 
@@ -53,6 +54,7 @@ class InvoiceController extends Controller
             'sub_total' => $subTotal,
             'tax_total' => $taxTotal,
             'total' => $total,
+            'currency' => Setting::get('default_currency', 'USD'),
             'status' => 'draft',
             'notes' => $validated['notes'],
             'created_by' => auth()->id(),
@@ -136,5 +138,37 @@ class InvoiceController extends Controller
     {
         $invoice->delete();
         return redirect()->route('invoices.index')->with('success', 'Invoice deleted successfully.');
+    }
+
+    public function print(Invoice $invoice)
+    {
+        $invoice->load(['client', 'items']);
+        return view('invoices.print', compact('invoice'));
+    }
+
+    public function updateStatus(Request $request, Invoice $invoice)
+    {
+        $validated = $request->validate([
+            'status' => 'required|string|in:draft,pending,sent,paid,unpaid,partially,overdue',
+        ]);
+
+        $invoice->update(['status' => $validated['status']]);
+
+        $statusColors = [
+            'draft' => '#6c757d',
+            'pending' => '#ffc107',
+            'sent' => '#0dcaf0',
+            'paid' => '#198754',
+            'unpaid' => '#dc3545',
+            'partially' => '#0d6efd',
+            'overdue' => '#212529',
+        ];
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status updated successfully.',
+            'status' => $invoice->status,
+            'color' => $statusColors[$invoice->status] ?? '#0d6efd'
+        ]);
     }
 }

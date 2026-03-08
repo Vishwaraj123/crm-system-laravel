@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Facades\Storage; @endphp
 <header class="navbar-dark-v1 shadow-sm">
     <div class="header-position">
         <span class="sidebar-toggler">
@@ -6,10 +7,15 @@
         <div class="dashboard-logo d-flex justify-content-center align-items-center py-20">
             <a class="logo" href="{{ route('dashboard') }}">
                 <div class="d-flex align-items-center">
-                    <!-- Logo placeholder or simple icon as requested to remove iDURAR name -->
-                    <div class="bg-primary rounded p-2 text-white">
-                        <i class="las la-briefcase fs-3"></i>
-                    </div>
+                    @if(!empty($appSettings['company_logo']))
+                        <img src="{{ Storage::url($appSettings['company_logo']) }}"
+                             alt="{{ $appSettings['company_name'] ?? 'Logo' }}"
+                             style="max-height: 46px; max-width: 180px; object-fit: contain;">
+                    @else
+                        <div class="bg-primary rounded p-2 text-white">
+                            <i class="las la-briefcase fs-3"></i>
+                        </div>
+                    @endif
                 </div>
             </a>
         </div>
@@ -38,9 +44,9 @@
                 </li>
 
                 <li class="mb-2">
-                    <a href="{{ route('offers.index') }}" class="d-flex align-items-center p-2 rounded {{ request()->routeIs('offers.*') ? 'bg-light text-dark fw-bold' : 'text-muted' }} text-decoration-none">
+                    <a href="{{ route('proposals.index') }}" class="d-flex align-items-center p-2 rounded {{ request()->routeIs('proposals.*') ? 'bg-light text-dark fw-bold' : 'text-muted' }} text-decoration-none">
                         <i class="las la-file-alt fs-4 me-3"></i>
-                        <span>{{ __('Quotes') }}</span>
+                        <span>{{ __('Proposals') }}</span>
                     </a>
                 </li>
 
@@ -58,19 +64,13 @@
                     </a>
                 </li>
 
-                {{-- <li class="mb-2">
-                    <a href="#" class="d-flex align-items-center p-2 rounded text-muted text-decoration-none">
-                        <i class="las la-percent fs-4 me-3"></i>
-                        <span>{{ __('Taxes') }}</span>
-                    </a>
-                </li> --}}
 
-                {{-- <li class="mb-2">
-                    <a href="#" class="d-flex align-items-center p-2 rounded text-muted text-decoration-none">
+                <li class="mb-2">
+                    <a href="{{ route('settings.index') }}" class="d-flex align-items-center p-2 rounded {{ request()->routeIs('settings.*') ? 'bg-light text-dark fw-bold' : 'text-muted' }} text-decoration-none">
                         <i class="las la-cog fs-4 me-3"></i>
                         <span>{{ __('Settings') }}</span>
                     </a>
-                </li> --}}
+                </li>
 
                 <li class="mb-2">
                     <a href="{{ route('about') }}" class="d-flex align-items-center p-2 rounded {{ request()->routeIs('about') ? 'bg-light text-dark fw-bold' : 'text-muted' }} text-decoration-none">
