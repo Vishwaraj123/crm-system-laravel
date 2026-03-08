@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
             <h2 class="h4 font-weight-bold text-dark mb-0">
-                {{ __('Proposal List') }}
+                {{ __('Proposals') }}
             </h2>
             <a href="{{ route('proposals.create') }}" class="btn btn-primary">
                 {{ __('Add New Proposal') }}
