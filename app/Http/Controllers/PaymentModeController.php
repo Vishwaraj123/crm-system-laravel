@@ -24,7 +24,7 @@ class PaymentModeController extends Controller
 
         \App\Models\PaymentMode::create($validated);
 
-        return redirect()->route('payment_modes.index')->with('success', 'Payment mode created successfully.');
+        return redirect()->route('payment-modes.index')->with('success', 'Payment mode created successfully.');
     }
 
     public function update(Request $request, \App\Models\PaymentMode $paymentMode)
@@ -36,12 +36,12 @@ class PaymentModeController extends Controller
 
         $paymentMode->update($validated);
 
-        return redirect()->route('payment_modes.index')->with('success', 'Payment mode updated successfully.');
+        return redirect()->route('payment-modes.index')->with('success', 'Payment mode updated successfully.');
     }
 
     public function destroy(\App\Models\PaymentMode $paymentMode)
     {
         $paymentMode->delete();
-        return redirect()->route('payment_modes.index')->with('success', 'Payment mode deleted successfully.');
+        return redirect()->route('payment-modes.index')->with('success', 'Payment mode deleted successfully.');
     }
 }

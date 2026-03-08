@@ -14,7 +14,7 @@ class ClientController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(\App\DataTables\CustomerDataTable $dataTable)
+    public function index(\App\DataTables\ClientDataTable $dataTable)
     {
         return $dataTable->render('clients.index');
     }

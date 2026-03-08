@@ -26,7 +26,7 @@
                 <li class="mb-2">
                     <a href="{{ route('clients.index') }}" class="d-flex align-items-center p-2 rounded {{ request()->routeIs('clients.*') ? 'bg-light text-dark fw-bold' : 'text-muted' }} text-decoration-none">
                         <i class="las la-user fs-4 me-3"></i>
-                        <span>{{ __('Customers') }}</span>
+                        <span>{{ __('Clients') }}</span>
                     </a>
                 </li>
 
@@ -73,7 +73,7 @@
                 </li> --}}
 
                 <li class="mb-2">
-                    <a href="#" class="d-flex align-items-center p-2 rounded text-muted text-decoration-none">
+                    <a href="{{ route('about') }}" class="d-flex align-items-center p-2 rounded {{ request()->routeIs('about') ? 'bg-light text-dark fw-bold' : 'text-muted' }} text-decoration-none">
                         <i class="las la-info-circle fs-4 me-3"></i>
                         <span>{{ __('About') }}</span>
                     </a>

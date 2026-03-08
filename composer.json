@@ -23,7 +23,8 @@
         "nunomaduro/collision": "^8.6",
         "pestphp/pest": "*",
         "pestphp/pest-plugin-laravel": "*",
-        "phpunit/phpunit": "^11.5.3"
+        "phpunit/phpunit": "^11.5.3",
+        "rector/rector": "*"
     },
     "autoload": {
         "psr-4": {

@@ -9,13 +9,13 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class CustomerDataTable extends DataTable
+class ClientDataTable extends DataTable
 {
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->addColumn('action', function($client) {
+            ->addColumn('action', function ($client) {
                 return view('clients.partials.action', ['id' => $client->id]);
             })
             ->rawColumns(['action'])
@@ -30,16 +30,16 @@ class CustomerDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('customer-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->orderBy(1)
-                    ->selectStyleSingle()
-                    ->setTableAttribute('class', 'table table-hover table-bordered w-100')
-                    ->parameters([
-                        'dom' => 'Blfrtip',
-                        'buttons' => ['excel', 'csv', 'pdf', 'print', 'reload'],
-                    ]);
+            ->setTableId('Client-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->orderBy(1)
+            ->selectStyleSingle()
+            ->setTableAttribute('class', 'table table-hover table-bordered w-100')
+            ->parameters([
+                'dom' => 'Blfrtip',
+                'buttons' => ['excel', 'csv', 'pdf', 'print', 'reload'],
+            ]);
     }
 
     public function getColumns(): array
@@ -51,15 +51,15 @@ class CustomerDataTable extends DataTable
             Column::make('phone')->title(__('Phone')),
             Column::make('country')->title(__('Country')),
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(120)
-                  ->addClass('text-center'),
+                ->exportable(false)
+                ->printable(false)
+                ->width(120)
+                ->addClass('text-center'),
         ];
     }
 
     protected function filename(): string
     {
-        return 'Customer_' . date('YmdHis');
+        return 'Client_' . date('YmdHis');
     }
 }
