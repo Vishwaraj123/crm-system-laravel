@@ -24,7 +24,7 @@
         "pestphp/pest": "*",
         "pestphp/pest-plugin-laravel": "*",
         "phpunit/phpunit": "^11.5.3",
-        "rector/rector": "*"
+        "rector/rector": "^2.3"
     },
     "autoload": {
         "psr-4": {
