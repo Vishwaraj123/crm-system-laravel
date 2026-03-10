@@ -83,4 +83,19 @@ class ClientController extends Controller
         return redirect()->route('clients.index')
             ->with('success', 'Client deleted successfully.');
     }
+
+    /**
+     * Remove multiple resources from storage.
+     */
+    public function bulkDelete(\Illuminate\Http\Request $request): \Illuminate\Http\JsonResponse
+    {
+        $ids = $request->input('ids');
+        if (empty($ids)) {
+            return response()->json(['success' => false, 'message' => 'No clients selected.']);
+        }
+
+        Client::whereIn('id', $ids)->update(['removed' => true]);
+
+        return response()->json(['success' => true, 'message' => 'Selected clients deleted successfully.']);
+    }
 }

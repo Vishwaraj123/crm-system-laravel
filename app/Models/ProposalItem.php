@@ -10,6 +10,8 @@ class ProposalItem extends Model
 {
     use HasFactory;
 
+    protected $table = 'proposal_items';
+
     protected $fillable = [
         'proposal_id',
         'itemName',

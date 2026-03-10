@@ -17,20 +17,20 @@ class PaymentDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->addColumn('client_name', function($payment) {
+            ->addColumn('client_name', function ($payment) {
                 return $payment->client->name;
             })
-            ->addColumn('invoice_number', function($payment) {
-                return $payment->invoice->number;
+            ->addColumn('invoice_number', function ($payment) {
+                return $payment->invoice->number ?? __('N/A');
             })
-            ->addColumn('date_display', function($payment) {
+            ->addColumn('date_display', function ($payment) {
                 $fmt = Setting::get('date_format', 'd/m/Y');
                 return Carbon::parse($payment->date)->format($fmt);
             })
-            ->addColumn('amount_display', function($payment) {
+            ->addColumn('amount_display', function ($payment) {
                 return number_format($payment->amount, 2);
             })
-            ->addColumn('action', function($payment) {
+            ->addColumn('action', function ($payment) {
                 return view('payments.partials.action', ['id' => $payment->id]);
             })
             ->rawColumns(['action'])
@@ -45,16 +45,16 @@ class PaymentDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('payment-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->orderBy(1)
-                    ->selectStyleSingle()
-                    ->setTableAttribute('class', 'table table-hover table-bordered w-100')
-                    ->parameters([
-                        'dom' => 'Blfrtip',
-                        'buttons' => ['excel', 'csv', 'pdf', 'print', 'reload'],
-                    ]);
+            ->setTableId('payment-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->orderBy(1)
+            ->selectStyleSingle()
+            ->setTableAttribute('class', 'table table-hover table-bordered w-100')
+            ->parameters([
+                'dom' => 'Blfrtip',
+                'buttons' => ['excel', 'csv', 'pdf', 'print', 'reload'],
+            ]);
     }
 
     public function getColumns(): array
@@ -68,10 +68,10 @@ class PaymentDataTable extends DataTable
             Column::make('amount_display')->title(__('Amount')),
             Column::make('payment_mode')->title(__('Mode')),
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(100)
-                  ->addClass('text-center'),
+                ->exportable(false)
+                ->printable(false)
+                ->width(100)
+                ->addClass('text-center'),
         ];
     }
 

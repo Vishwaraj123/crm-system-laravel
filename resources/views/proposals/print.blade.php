@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('Invoice') }} - {{ $invoice->number }}</title>
+    <title>{{ __('Proposal') }} - {{ $proposal->number }}</title>
     <style>
         @page {
             margin: 0;
@@ -78,10 +78,6 @@
             max-width: 180px;
         }
 
-        .invoice-header {
-            margin-bottom: 30px;
-        }
-
         .info-table {
             width: 100%;
             margin-bottom: 30px;
@@ -116,17 +112,17 @@
             color: #fff;
         }
 
-        .paid {
+        .accepted {
             background: #198754;
             color: #fff;
         }
 
-        .unpaid {
+        .declined {
             background: #dc3545;
             color: #fff;
         }
 
-        .overdue {
+        .cancelled {
             background: #212529;
             color: #fff;
         }
@@ -136,7 +132,7 @@
 <body>
     @php
         $dateFormat = $appSettings['date_format'] ?? 'd/m/Y';
-        $currencySymbol = $appSettings['default_currency'] ?? 'USD';
+        $currencyCode = $appSettings['default_currency'] ?? 'USD';
         $companyName = $appSettings['company_name'] ?? '';
         $companyAddress = $appSettings['company_address'] ?? '';
         $companyState = $appSettings['company_state'] ?? '';
@@ -151,17 +147,17 @@
     <table class="info-table">
         <tr>
             <td>
-                <h1 class="fw-bold text-primary mb-1">{{ __('INVOICE') }}</h1>
-                <p class="text-muted">{{ $invoice->number }}</p>
+                <h1 class="fw-bold text-primary mb-1">{{ __('PROPOSAL') }}</h1>
+                <p class="text-muted">{{ $proposal->number }}</p>
             </td>
             <td class="text-end">
                 <div class="mb-2">
                     <span class="text-muted small">{{ __('Date') }}:</span>
-                    <span class="fw-bold">{{ $invoice->date->format($dateFormat) }}</span>
+                    <span class="fw-bold">{{ $proposal->date->format($dateFormat) }}</span>
                 </div>
                 <div>
-                    <span class="text-muted small">{{ __('Due Date') }}:</span>
-                    <span class="fw-bold">{{ $invoice->expired_date->format($dateFormat) }}</span>
+                    <span class="text-muted small">{{ __('Expiry Date') }}:</span>
+                    <span class="fw-bold">{{ $proposal->expired_date->format($dateFormat) }}</span>
                 </div>
             </td>
         </tr>
@@ -172,7 +168,6 @@
             <td>
                 <p class="text-muted small fw-bold mb-2">{{ __('From') }}</p>
                 @if ($companyLogo)
-                    {{-- Note: dompdf handles absolute paths best for images --}}
                     <img src="{{ public_path('storage/' . $companyLogo) }}" class="company-logo mb-2"
                         alt="{{ $companyName }}">
                 @endif
@@ -190,24 +185,21 @@
                     @if ($companyPhone)
                         {{ $companyPhone }}<br>
                     @endif
-                    @if ($companyWebsite)
-                        {{ $companyWebsite }}<br>
-                    @endif
                     @if ($companyTax)
                         <span class="text-muted">{{ __('Tax/VAT') }}: {{ $companyTax }}</span>
                     @endif
                 </div>
             </td>
             <td class="text-end">
-                <p class="text-muted small fw-bold mb-2">{{ __('Bill To') }}</p>
-                <h3 class="fw-bold mb-1">{{ $invoice->client->name }}</h3>
+                <p class="text-muted small fw-bold mb-2">{{ __('Proposed To') }}</p>
+                <h3 class="fw-bold mb-1">{{ $proposal->client->name }}</h3>
                 <div class="small">
-                    {{ $invoice->client->email }}<br>
-                    {{ $invoice->client->phone }}
+                    {{ $proposal->client->email }}<br>
+                    {{ $proposal->client->phone }}
                 </div>
                 <div class="mt-5">
                     <p class="text-muted small fw-bold mb-1">{{ __('Status') }}</p>
-                    <span class="status-badge {{ $invoice->status }}">{{ strtoupper($invoice->status) }}</span>
+                    <span class="status-badge {{ $proposal->status }}">{{ strtoupper($proposal->status) }}</span>
                 </div>
             </td>
         </tr>
@@ -223,7 +215,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($invoice->items as $item)
+            @foreach ($proposal->items as $item)
                 <tr>
                     <td>{{ $item->itemName }}</td>
                     <td class="text-center">{{ $item->quantity }}</td>
@@ -241,12 +233,12 @@
                 <table style="width: 100%;">
                     <tr>
                         <td class="text-muted">{{ __('Sub Total') }}:</td>
-                        <td class="text-end fw-bold">{{ $currencySymbol }}{{ number_format($invoice->sub_total, 2) }}
+                        <td class="text-end fw-bold">{{ $currencyCode }} {{ number_format($proposal->sub_total, 2) }}
                         </td>
                     </tr>
                     <tr>
-                        <td class="text-muted">{{ __('Tax') }} ({{ $invoice->tax_rate }}%):</td>
-                        <td class="text-end fw-bold">{{ $currencySymbol }}{{ number_format($invoice->tax_total, 2) }}
+                        <td class="text-muted">{{ __('Tax') }} ({{ $proposal->tax_rate }}%):</td>
+                        <td class="text-end fw-bold">{{ $currencyCode }} {{ number_format($proposal->tax_total, 2) }}
                         </td>
                     </tr>
                     <tr>
@@ -256,11 +248,11 @@
                     </tr>
                     <tr>
                         <td>
-                            <h3 class="fw-bold">{{ __('Grand Total') }}:</h3>
+                            <h3 class="fw-bold">{{ __('Total') }}:</h3>
                         </td>
                         <td class="text-end">
-                            <h3 class="fw-bold text-primary">
-                                {{ $currencySymbol }}{{ number_format($invoice->total, 2) }}</h3>
+                            <h3 class="fw-bold text-primary">{{ $currencyCode }}
+                                {{ number_format($proposal->total, 2) }}</h3>
                         </td>
                     </tr>
                 </table>
@@ -268,10 +260,10 @@
         </tr>
     </table>
 
-    @if ($invoice->notes)
+    @if ($proposal->notes)
         <div class="mt-5" style="border-top: 1px solid #eee; padding-top: 20px;">
             <p class="text-muted small fw-bold mb-2">{{ __('Notes') }}</p>
-            <p class="small text-muted">{{ $invoice->notes }}</p>
+            <p class="small text-muted">{{ $proposal->notes }}</p>
         </div>
     @endif
 </body>

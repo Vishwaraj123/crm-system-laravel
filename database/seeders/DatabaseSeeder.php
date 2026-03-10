@@ -2,8 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Setting;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,7 +12,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = User::updateOrCreate(
+        $admin = \App\Models\User::updateOrCreate(
             ['email' => 'admin@admin.com'],
             [
                 'name' => 'Admin User',
@@ -24,16 +23,14 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        $user = User::updateOrCreate(
-            ['email' => 'test@example.com'],
-            [
-                'name' => 'Test User',
-                'password' => 'password',
-                'role' => 'employee',
-                'enabled' => true,
-                'email_verified_at' => now(),
-            ]
-        );
+        // Seed Company Settings
+        Setting::set('company_name', 'Vishwaraj CRM');
+        Setting::set('company_address', 'Mumbai, India');
+        Setting::set('company_email', 'contact@vishwaraj.com');
+        Setting::set('company_phone', '+91-1234567890');
+        Setting::set('default_currency', 'INR');
+        Setting::set('currency_symbol', 'INR');
+        Setting::set('date_format', 'd/m/Y');
 
         // Seed 15 clients assigned to the admin user
         if (\App\Models\Client::count() === 0) {
@@ -42,8 +39,11 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        if (\App\Models\Lead::count() === 0) {
-            \App\Models\Lead::factory(10)->create();
-        }
+
+        $this->call([
+            PaymentModeSeeder::class,
+            ProposalSeeder::class,
+            InvoiceSeeder::class,
+        ]);
     }
 }

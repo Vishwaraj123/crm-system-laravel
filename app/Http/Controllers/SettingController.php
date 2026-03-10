@@ -10,18 +10,18 @@ class SettingController extends Controller
 {
     // Currency options: code => [symbol, name]
     const CURRENCIES = [
-        'USD' => ['$',  'USD — US Dollar'],
-        'EUR' => ['€',  'EUR — Euro'],
-        'GBP' => ['£',  'GBP — British Pound'],
-        'INR' => ['₹',  'INR — Indian Rupee'],
-        'AUD' => ['A$', 'AUD — Australian Dollar'],
-        'CAD' => ['C$', 'CAD — Canadian Dollar'],
-        'AED' => ['د.إ','AED — UAE Dirham'],
-        'SAR' => ['﷼',  'SAR — Saudi Riyal'],
-        'JPY' => ['¥',  'JPY — Japanese Yen'],
-        'CNY' => ['¥',  'CNY — Chinese Yuan'],
-        'SGD' => ['S$', 'SGD — Singapore Dollar'],
-        'CHF' => ['Fr', 'CHF — Swiss Franc'],
+        'USD' => ['USD', 'USD — US Dollar'],
+        'EUR' => ['EUR', 'EUR — Euro'],
+        'GBP' => ['GBP', 'GBP — British Pound'],
+        'INR' => ['INR', 'INR — Indian Rupee'],
+        'AUD' => ['AUD', 'AUD — Australian Dollar'],
+        'CAD' => ['CAD', 'CAD — Canadian Dollar'],
+        'AED' => ['AED', 'AED — UAE Dirham'],
+        'SAR' => ['SAR', 'SAR — Saudi Riyal'],
+        'JPY' => ['JPY', 'JPY — Japanese Yen'],
+        'CNY' => ['CNY', 'CNY — Chinese Yuan'],
+        'SGD' => ['SGD', 'SGD — Singapore Dollar'],
+        'CHF' => ['CHF', 'CHF — Swiss Franc'],
     ];
 
     const DATE_FORMATS = [
@@ -35,8 +35,8 @@ class SettingController extends Controller
 
     public function index()
     {
-        $settings    = Setting::allAsArray();
-        $currencies  = self::CURRENCIES;
+        $settings = Setting::allAsArray();
+        $currencies = self::CURRENCIES;
         $dateFormats = self::DATE_FORMATS;
         return view('settings.index', compact('settings', 'currencies', 'dateFormats'));
     }
@@ -44,33 +44,39 @@ class SettingController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'company_name'       => 'nullable|string|max:150',
-            'company_address'    => 'nullable|string|max:255',
-            'company_state'      => 'nullable|string|max:100',
-            'company_country'    => 'nullable|string|max:100',
-            'company_email'      => 'nullable|email|max:150',
-            'company_phone'      => 'nullable|string|max:30',
-            'company_website'    => 'nullable|url|max:200',
+            'company_name' => 'nullable|string|max:150',
+            'company_address' => 'nullable|string|max:255',
+            'company_state' => 'nullable|string|max:100',
+            'company_country' => 'nullable|string|max:100',
+            'company_email' => 'nullable|email|max:150',
+            'company_phone' => 'nullable|string|max:30',
+            'company_website' => 'nullable|url|max:200',
             'company_tax_number' => 'nullable|string|max:60',
-            'company_logo'       => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'default_currency'   => 'nullable|string|max:10',
-            'date_format'        => 'nullable|string|max:20',
+            'company_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'default_currency' => 'nullable|string|max:10',
+            'date_format' => 'nullable|string|max:20',
         ]);
 
         $keys = [
-            'company_name', 'company_address', 'company_state', 'company_country',
-            'company_email', 'company_phone', 'company_website', 'company_tax_number',
-            'default_currency', 'date_format',
+            'company_name',
+            'company_address',
+            'company_state',
+            'company_country',
+            'company_email',
+            'company_phone',
+            'company_website',
+            'company_tax_number',
+            'default_currency',
+            'date_format',
         ];
 
         foreach ($keys as $key) {
             Setting::set($key, $request->input($key, ''));
         }
 
-        // Update currency symbol automatically based on selected currency
+        // Update currency symbol to be same as code
         if ($request->filled('default_currency')) {
-            $symbol = self::CURRENCIES[$request->default_currency][0] ?? $request->default_currency;
-            Setting::set('currency_symbol', $symbol);
+            Setting::set('currency_symbol', $request->default_currency);
         }
 
         // Handle logo upload

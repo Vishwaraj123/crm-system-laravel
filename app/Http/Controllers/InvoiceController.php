@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\Setting;
 use App\DataTables\InvoiceDataTable;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class InvoiceController extends Controller
 {
@@ -143,7 +144,8 @@ class InvoiceController extends Controller
     public function print(Invoice $invoice)
     {
         $invoice->load(['client', 'items']);
-        return view('invoices.print', compact('invoice'));
+        $pdf = Pdf::loadView('invoices.print', compact('invoice'));
+        return $pdf->download('Invoice_' . $invoice->number . '.pdf');
     }
 
     public function updateStatus(Request $request, Invoice $invoice)

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->decimal('total', 15, 2);
             $table->decimal('paid', 15, 2)->default(0);
             $table->string('status')->default('draft'); // draft, pending, sent, paid, unpaid, partially, overdue
-            $table->string('currency')->default('rs');
+            $table->string('currency')->default('INR');
             $table->text('notes')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users');
             $table->timestamps();

@@ -5,8 +5,11 @@
                 {{ __('Proposal Details') }}: {{ $proposal->number }}
             </h2>
             <div>
-                <a href="{{ route('proposals.edit', $proposal) }}" class="btn btn-primary me-2">
+                <a href="{{ route('proposals.edit', $proposal) }}" class="btn btn-outline-primary me-2">
                     {{ __('Edit') }}
+                </a>
+                <a href="{{ route('proposals.print', $proposal) }}" target="_blank" class="btn btn-primary me-2">
+                    <i class="las la-download"></i> {{ __('Download PDF') }}
                 </a>
                 <a href="{{ route('proposals.index') }}" class="btn btn-outline-secondary">
                     {{ __('Back to List') }}
@@ -26,17 +29,18 @@
                             <p class="mb-1 text-muted">{{ $proposal->client->email }}</p>
                             <p class="mb-1 text-muted">{{ $proposal->client->phone }}</p>
                             <p class="mb-0 text-muted">{{ $proposal->client->address }}</p>
-                            
+
                             <h5 class="card-title border-bottom pb-2 mb-3 mt-4">{{ __('Proposal Status') }}</h5>
                             @php
-                                $statusClass = [
-                                    'draft' => 'bg-secondary',
-                                    'pending' => 'bg-warning text-dark',
-                                    'sent' => 'bg-info',
-                                    'accepted' => 'bg-success',
-                                    'declined' => 'bg-danger',
-                                    'cancelled' => 'bg-dark',
-                                ][$proposal->status] ?? 'bg-primary';
+                                $statusClass =
+                                    [
+                                        'draft' => 'bg-secondary',
+                                        'pending' => 'bg-warning text-dark',
+                                        'sent' => 'bg-info',
+                                        'accepted' => 'bg-success',
+                                        'declined' => 'bg-danger',
+                                        'cancelled' => 'bg-dark',
+                                    ][$proposal->status] ?? 'bg-primary';
                             @endphp
                             <span class="badge {{ $statusClass }} text-capitalize px-3 py-2 w-100 fs-6">
                                 {{ $proposal->status }}
@@ -46,11 +50,13 @@
                             <ul class="list-unstyled mb-0">
                                 <li class="d-flex justify-content-between mb-2">
                                     <span class="text-muted">{{ __('Issue Date') }}:</span>
-                                    <span class="fw-medium">{{ $proposal->date->format($appSettings['date_format'] ?? 'd/m/Y') }}</span>
+                                    <span
+                                        class="fw-medium">{{ $proposal->date->format($appSettings['date_format'] ?? 'd/m/Y') }}</span>
                                 </li>
                                 <li class="d-flex justify-content-between">
                                     <span class="text-muted">{{ __('Expiry Date') }}:</span>
-                                    <span class="fw-medium text-danger">{{ $proposal->expired_date->format($appSettings['date_format'] ?? 'd/m/Y') }}</span>
+                                    <span
+                                        class="fw-medium text-danger">{{ $proposal->expired_date->format($appSettings['date_format'] ?? 'd/m/Y') }}</span>
                                 </li>
                             </ul>
                         </div>
@@ -89,15 +95,19 @@
                                     <tfoot>
                                         <tr>
                                             <th colspan="3" class="text-end border-0">{{ __('Sub Total') }}</th>
-                                            <td class="text-end border-0">{{ number_format($proposal->sub_total, 2) }}</td>
+                                            <td class="text-end border-0">{{ $proposal->currency }}
+                                                {{ number_format($proposal->sub_total, 2) }}</td>
                                         </tr>
                                         <tr>
-                                            <th colspan="3" class="text-end border-0">{{ __('Tax') }} ({{ $proposal->tax_rate }}%)</th>
-                                            <td class="text-end border-0">{{ number_format($proposal->tax_total, 2) }}</td>
+                                            <th colspan="3" class="text-end border-0">{{ __('Tax') }}
+                                                ({{ $proposal->tax_rate }}%)</th>
+                                            <td class="text-end border-0">{{ $proposal->currency }}
+                                                {{ number_format($proposal->tax_total, 2) }}</td>
                                         </tr>
                                         <tr class="table-primary fw-bold fs-5">
                                             <th colspan="3" class="text-end border-0">{{ __('Grand Total') }}</th>
-                                            <td class="text-end border-0">{{ $proposal->currency }} {{ number_format($proposal->total, 2) }}</td>
+                                            <td class="text-end border-0">{{ $proposal->currency }}
+                                                {{ number_format($proposal->total, 2) }}</td>
                                         </tr>
                                     </tfoot>
                                 </table>

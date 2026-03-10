@@ -15,10 +15,13 @@ class ClientDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addIndexColumn()
+            ->addColumn('checkbox', function ($client) {
+                return '<input type="checkbox" class="form-check-input client-checkbox" value="' . $client->id . '">';
+            })
             ->addColumn('action', function ($client) {
                 return view('clients.partials.action', ['id' => $client->id]);
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['checkbox', 'action'])
             ->setRowId('id');
     }
 
@@ -45,6 +48,12 @@ class ClientDataTable extends DataTable
     public function getColumns(): array
     {
         return [
+            Column::computed('checkbox')
+                ->title('<input type="checkbox" class="form-check-input" id="check-all">')
+                ->exportable(false)
+                ->printable(false)
+                ->width(30)
+                ->addClass('text-center'),
             Column::computed('DT_RowIndex')->title('#')->width(30)->addClass('text-center'),
             Column::make('name')->title(__('Name')),
             Column::make('email')->title(__('Email')),

@@ -8,12 +8,20 @@ use App\Models\Client;
 use App\Models\PaymentMode;
 use App\DataTables\PaymentDataTable;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PaymentController extends Controller
 {
     public function index(PaymentDataTable $dataTable)
     {
         return $dataTable->render('payments.index');
+    }
+
+    public function print(Payment $payment)
+    {
+        $payment->load(['client', 'invoice']);
+        $pdf = Pdf::loadView('payments.print', compact('payment'));
+        return $pdf->download('Payment_' . $payment->number . '.pdf');
     }
 
     public function create()
@@ -50,13 +58,13 @@ class PaymentController extends Controller
         // Update invoice paid amount and status
         $invoice = Invoice::find($validated['invoice_id']);
         $invoice->paid += $validated['amount'];
-        
+
         if ($invoice->paid >= $invoice->total) {
             $invoice->status = 'paid';
         } elseif ($invoice->paid > 0) {
             $invoice->status = 'partially';
         }
-        
+
         $invoice->save();
 
         return redirect()->route('payments.index')->with('success', 'Payment recorded successfully.');
@@ -73,7 +81,7 @@ class PaymentController extends Controller
         // Revert invoice paid amount
         $invoice = $payment->invoice;
         $invoice->paid -= $payment->amount;
-        
+
         if ($invoice->paid <= 0) {
             $invoice->status = 'pending';
         } elseif ($invoice->paid < $invoice->total) {

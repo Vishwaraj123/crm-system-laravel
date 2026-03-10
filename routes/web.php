@@ -21,13 +21,16 @@ Route::middleware('auth')->group(function () {
         return view('about');
     })->name('about');
 
+    Route::post('clients/bulk-delete', [\App\Http\Controllers\ClientController::class, 'bulkDelete'])->name('clients.bulkDelete');
     Route::resource('clients', ClientController::class);
     Route::resource('proposals', \App\Http\Controllers\ProposalController::class);
+    Route::get('proposals/{proposal}/print', [\App\Http\Controllers\ProposalController::class, 'print'])->name('proposals.print');
     Route::patch('proposals/{proposal}/status', [\App\Http\Controllers\ProposalController::class, 'updateStatus'])->name('proposals.updateStatus');
     Route::resource('invoices', \App\Http\Controllers\InvoiceController::class);
     Route::get('invoices/{invoice}/print', [\App\Http\Controllers\InvoiceController::class, 'print'])->name('invoices.print');
     Route::patch('invoices/{invoice}/status', [\App\Http\Controllers\InvoiceController::class, 'updateStatus'])->name('invoices.updateStatus');
     Route::resource('payments', \App\Http\Controllers\PaymentController::class);
+    Route::get('payments/{payment}/print', [\App\Http\Controllers\PaymentController::class, 'print'])->name('payments.print');
     Route::resource('payment-modes', \App\Http\Controllers\PaymentModeController::class);
     Route::resource('admin', \App\Http\Controllers\AdminController::class);
 
@@ -36,4 +39,4 @@ Route::middleware('auth')->group(function () {
     Route::post('/settings', [\App\Http\Controllers\SettingController::class, 'update'])->name('settings.update');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

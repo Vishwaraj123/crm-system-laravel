@@ -6,12 +6,20 @@ use App\Models\Proposal;
 use App\Http\Requests\StoreProposalRequest;
 use App\Http\Requests\UpdateProposalRequest;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ProposalController extends Controller
 {
     public function index(\App\DataTables\ProposalDataTable $dataTable)
     {
         return $dataTable->render('proposals.index');
+    }
+
+    public function print(Proposal $proposal)
+    {
+        $proposal->load(['client', 'items']);
+        $pdf = Pdf::loadView('proposals.print', compact('proposal'));
+        return $pdf->download('Proposal_' . $proposal->number . '.pdf');
     }
 
     public function create()
